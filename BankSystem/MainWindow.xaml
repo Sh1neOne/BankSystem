@@ -7,6 +7,30 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Vertical"
+                    >
+            <ListBox x:Name="DepartamentsList"                    
+                      VerticalAlignment="Stretch"
+                      Margin="2"
+                      HorizontalAlignment="Stretch"
+                      >
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}">
+                        </TextBlock></DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Button x:Name="AddClient" Click="AddClient_Click">Добавить клиента</Button>
+        </StackPanel>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,20 @@ namespace BankSystem
         public MainWindow()
         {
             InitializeComponent();
+            Bank bank = new Bank();
+            //bank.VipDepartamnent.AddClient(new VIPClient("123", "123"));
+            DepartamentsList.ItemsSource = bank.ListDepartaments;
+            //VIPDepartament.DataContext = bank.VipDepartamnent;
+            //StandartDepartament.DataContext = bank.StandartDepartamnent;
+            //CompanyDepartament.DataContext = bank.CompanyDepartamnent;
+            var dep = new Departament<VIPClient>("123");
+            dep.AddClient(new Client())
+
+        }
+
+        private void AddClient_Click(object sender, RoutedEventArgs e)
+        {
+        
         }
     }
 }
