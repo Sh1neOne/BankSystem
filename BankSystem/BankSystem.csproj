@@ -57,9 +57,16 @@
     </ApplicationDefinition>
     <Compile Include="CompanyClient.cs" />
     <Compile Include="Departament.cs" />
+    <Compile Include="DialogClient.xaml.cs">
+      <DependentUpon>DialogClient.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IClient.cs" />
     <Compile Include="StandartClient.cs" />
     <Compile Include="VIPClient.cs" />
+    <Page Include="DialogClient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

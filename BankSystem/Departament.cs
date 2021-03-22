@@ -7,26 +7,35 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    class Departament<T>: IClient<T>
-        where T : Client, new()
+    class Departament<T>
+        where T: Client
+ 
     {
-        private ObservableCollection<IClient<T>> clients;
+        private ObservableCollection<T> clients;
         private string name;
 
         public Departament(string name)
         {
-            Clients = new ObservableCollection<IClient<T>>();
+            Clients = new ObservableCollection<T>();
             Name = name;
         }
 
-        public void AddClient()
+        public void AddClient(T client)
         {
-            IClient<T> tclient = new T();
-            Clients.Add(tclient);
+            Clients.Add(client);
         }
 
+        public void CreateClientCol(Bank bank)
+        {
+            var a = bank.AllClients.FindAll(x => x.GetType() == typeof(T));
+            foreach (T item in a)
+            {
+                Console.WriteLine();
+                Clients.Add(item);
+            }
+        }
 
-        public ObservableCollection<IClient<T>> Clients { get => clients; set => clients = value; }
+        public ObservableCollection<T> Clients { get => clients; set => clients = value; }
         public string Name { get => name; set => name = value; }
 
     }

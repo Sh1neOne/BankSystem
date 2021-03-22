@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,26 +19,29 @@ namespace BankSystem
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
+    /// </summary>\
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
             Bank bank = new Bank();
-            //bank.VipDepartamnent.AddClient(new VIPClient("123", "123"));
-            DepartamentsList.ItemsSource = bank.ListDepartaments;
-            //VIPDepartament.DataContext = bank.VipDepartamnent;
-            //StandartDepartament.DataContext = bank.StandartDepartamnent;
-            //CompanyDepartament.DataContext = bank.CompanyDepartamnent;
-            var dep = new Departament<VIPClient>("123");
-            dep.AddClient(new Client())
+            DepartamentsList.ItemsSource = bank.DepartamentList;
+            //bank.AllClients.Add(new VIPClient("123", "123"));
+            //var a = new ObservableCollection<VIPClient>();
+            //bank.CreateClientCol<VIPClient>(a);
 
         }
 
         private void AddClient_Click(object sender, RoutedEventArgs e)
         {
-        
+            var t = DepartamentsList.SelectedItem;
+ 
+            if (t is Departament<VIPClient> p)
+            {
+                p.AddClient(new VIPClient("123", "123"));
+            }
+            
         }
     }
 }
