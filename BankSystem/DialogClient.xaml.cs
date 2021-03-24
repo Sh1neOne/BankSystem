@@ -21,11 +21,19 @@ namespace BankSystem
 
     {
         private Client contextClient;
-        public DialogClient()
+        public DialogClient(Client contextCl)
         {
+            ContextClient = contextCl;
+            this.DataContext = ContextClient;
             InitializeComponent();
         }
 
-        public Client ContextClient { get => contextClient; set => ContextClient = value; }
+        public Client ContextClient { get => contextClient; set => contextClient = value; }
+
+        private void Accept_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = true;
+            ContextClient.GoodCreditHistory = goodCreditHistoryCheckBox.IsEnabled;
+        }
     }
 }

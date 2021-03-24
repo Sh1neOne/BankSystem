@@ -17,45 +17,85 @@ namespace BankSystem
         private Departament<CompanyClient> companyDepartament;
         private List<Client> allClients;
         private ArrayList departamentList;
-       
+        public static int interestRate = 12;
+        Random rnd = new Random();
+
+        /// <summary>
+        /// Конструктор инициализирует начальные данные
+        /// </summary>
         public Bank()
         {
-            AllClients = new List<Client>();
-            for (int i = 0; i < 5; i++)
-            {
-                AllClients.Add(new VIPClient($"ВИП Имя_{i}", $"Фамилия_{i}"));
-                AllClients.Add(new StandartClient($"Стандарт Имя_{i}", $"Фамилия_{i}"));
-                AllClients.Add(new CompanyClient($"Имя_{i}", $"Фамилия_{i}"));
-            }
 
             VipDepartament = new Departament<VIPClient>("Отдел работы с VIP клиентами");
-            VipDepartament.CreateClientCol(this);
             StandartDepartament = new Departament<StandartClient>("Отдел работы с обычными клиентами");
-            StandartDepartament.CreateClientCol(this);
             CompanyDepartament = new Departament<CompanyClient>("Отдел работы с юридическими лицами");
-            CompanyDepartament.CreateClientCol(this);
-            DepartamentList = new ArrayList();
-            DepartamentList.Add(VipDepartament);
-            DepartamentList.Add(StandartDepartament);
-            DepartamentList.Add(CompanyDepartament);
+            DepartamentList = new ArrayList
+            {
+                VipDepartament,
+                StandartDepartament,
+                CompanyDepartament
+            };
+            for (int i = 1; i <= 5; i++)
+            {
+                var vipCl = new VIPClient($"ВИП Имя_{i}", $"Фамилия_{i}");
+                VipDepartament.AddClient(vipCl);
+                AddRandomAccounts(vipCl);
 
+                var stmdCl = new StandartClient($"Стандарт Имя_{i}", $"Фамилия_{i}");
+                StandartDepartament.AddClient(stmdCl);
+                AddRandomAccounts(stmdCl);
 
-            //listDepartaments = new ObservableCollection<Departament>
-            //{
-            //    vipDepartamnent,
-            //    standartDepartamnent,
-            //    companyDepartamnent
-            //};
+                var cmpCl = new CompanyClient($"Компания Имя_{i}", $"Фамилия_{i}");
+                CompanyDepartament.AddClient(cmpCl);
+                AddRandomAccounts(cmpCl);
 
+            }
+
+        }          
+
+        /// <summary>
+        /// Метод создает случайные счета клиентов
+        /// </summary>
+        /// <param name="client"></param>
+        public void AddRandomAccounts(Client client)
+        {
+            var CountAcc = rnd.Next(1, 7);
+            for (int i = 1; i <= CountAcc; i++)
+            {
+                var rndAccType = rnd.Next(2);
+                switch (rndAccType)
+                {
+                    case 0:
+                        client.Accounts.Add(new Account(i.ToString(), rnd.Next(5) * 1000));
+                        break;
+                    case 1:
+                        client.Accounts.Add(new DepositAccount(i.ToString(), rnd.Next(1, 5) * 1000, Convert.ToBoolean(rnd.Next(1)), rnd.Next(1, 13), rnd.Next(1,13)));
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
-        
-   
-        //internal List<Departament<Client>> ListDepartaments { get => listDepartaments; set => listDepartaments = value; }
+        /// <summary>
+        /// Коллекция всех клиентов банков
+        /// </summary>
         public List<Client> AllClients { get => allClients; set => allClients = value; }
+        /// <summary>
+        /// Коллекция департаментов 
+        /// </summary>
         public ArrayList DepartamentList { get => departamentList; set => departamentList = value; }
+        /// <summary>
+        /// Департамент по работе с вип клиентами
+        /// </summary>
         internal Departament<VIPClient> VipDepartament { get => vipDepartament; set => vipDepartament = value; }
+        /// <summary>
+        /// Департамент по работе со стандартными клиентами
+        /// </summary>
         internal Departament<StandartClient> StandartDepartament { get => standartDepartament; set => standartDepartament = value; }
+        /// <summary>
+        /// Департамент по работе с компаниями
+        /// </summary>
         internal Departament<CompanyClient> CompanyDepartament { get => companyDepartament; set => companyDepartament = value; }
     }
 }

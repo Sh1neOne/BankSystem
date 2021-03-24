@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    class VIPClient : Client, IClient<Client>
+    class VIPClient : Client
     {
+        public VIPClient() : base()
+        {
+        }
+
         public VIPClient(string firstName, string lastName) : base(firstName, lastName)
         {
         }
