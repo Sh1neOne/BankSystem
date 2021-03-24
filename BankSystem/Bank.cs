@@ -39,14 +39,6 @@ namespace BankSystem
             DepartamentList.Add(StandartDepartament);
             DepartamentList.Add(CompanyDepartament);
 
-
-            //listDepartaments = new ObservableCollection<Departament>
-            //{
-            //    vipDepartamnent,
-            //    standartDepartamnent,
-            //    companyDepartamnent
-            //};
-
         }
 
         

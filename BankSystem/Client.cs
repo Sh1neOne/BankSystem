@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    public class Client 
+    abstract class Client: IClient<Client> 
     {
         private string firstName;
         private string lastName;

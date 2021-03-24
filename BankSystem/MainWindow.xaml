@@ -6,31 +6,47 @@
         xmlns:local="clr-namespace:BankSystem"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
+
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+    
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
                     Orientation="Vertical"
                     >
-            <ListBox x:Name="DepartamentsList"                    
+            <ListBox  x:Name="DepartamentsList"                    
                       VerticalAlignment="Stretch"
                       Margin="2"
                       HorizontalAlignment="Stretch"
+                      MinHeight="30" SelectionChanged="DepartamentsList_SelectionChanged"
+                      IsSynchronizedWithCurrentItem="True"
+                      DisplayMemberPath="Name"
                       >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}">
-                        </TextBlock></DataTemplate>
-                </ListBox.ItemTemplate>
             </ListBox>
             <Button x:Name="AddClient" Click="AddClient_Click">Добавить клиента</Button>
         </StackPanel>
+        <ListView x:Name="ClientListView"
+                  Grid.Row="0"
+                  Grid.Column="1"
+                  VerticalAlignment="Stretch"
+                  ItemsSource="{Binding Path = Clients}"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = Id}">ID</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = FirstName}">FirstName</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path = LastName}">LastName</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

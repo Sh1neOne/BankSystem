@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    class Departament<T>
+     class Departament<T>
         where T: Client
  
     {
@@ -30,7 +30,6 @@ namespace BankSystem
             var a = bank.AllClients.FindAll(x => x.GetType() == typeof(T));
             foreach (T item in a)
             {
-                Console.WriteLine();
                 Clients.Add(item);
             }
         }
