@@ -29,52 +29,38 @@ namespace BankSystem
             DepartamentsList.ItemsSource = bank.DepartamentList;
             DepartamentsList.DataContext = bank.DepartamentList;
             ClientListView.DataContext = bank.DepartamentList;
-            //bank.AllClients.Add(new VIPClient("123", "123"));
-            //var a = new ObservableCollection<VIPClient>();
-            //bank.CreateClientCol<VIPClient>(a);
 
         }
 
         private void AddClient_Click(object sender, RoutedEventArgs e)
         {
             var t = DepartamentsList.SelectedItem;
-
             if (t != null)
             {
-                Client newClient;
-                Departament<Client> dep;
-
                 if (t is Departament<VIPClient> p)
                 {
-                    newClient = new VIPClient("", "");
-                    dep = t as Departament<VIPClient>;
+                    p.AddClientDialog(new VIPClient("",""));
                 }
-                else if (t is Departament<CompanyClient>)
+                else if (t is Departament<StandartClient> s)
                 {
-                    newClient = new CompanyClient("", "");
-                    dep = t as Departament<CompanyClient>;
+                    s.AddClientDialog(new StandartClient("", ""));
                 }
-                else
+                else if (t is Departament<CompanyClient> c)
                 {
-                    newClient = new StandartClient("", "");
-                    dep = t as Departament<StandartClient>;
+                    c.AddClientDialog(new CompanyClient("", ""));
                 }
-
-
-                DialogClient dc = new DialogClient(newClient);
-                if (dc.ShowDialog() == true)
-                {
-                    dep.AddClient(dc.ContextClient as VIPClient);
-                }
-
             }
+
         }
 
+  
 
 
         private void DepartamentsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //ContentClients.Content = (DepartamentsList.SelectedItem as Departament<VIPClient>).Clients;
         }
+
+     
     }
 }

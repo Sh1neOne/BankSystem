@@ -6,8 +6,6 @@
         xmlns:local="clr-namespace:BankSystem"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -37,7 +35,7 @@
         <ListView x:Name="ClientListView"
                   Grid.Row="0"
                   Grid.Column="1"
-                  VerticalAlignment="Stretch"
+                  Height="300"
                   ItemsSource="{Binding Path = Clients}"
                   >
             <ListView.View>

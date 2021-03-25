@@ -7,13 +7,18 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    abstract class Client: IClient<Client> 
+    public class Client: IClient<Client> 
     {
         private string firstName;
         private string lastName;
         private string id;
         private ObservableCollection<Account> accounts;
         private bool goodCreditHistory;
+
+        public Client()
+        {
+
+        }
 
         public Client(string firstName, string lastName)
         {

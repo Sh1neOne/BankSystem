@@ -34,6 +34,15 @@ namespace BankSystem
             }
         }
 
+        public void AddClientDialog(Object newClient)
+        {     
+                DialogClient dc = new DialogClient(newClient as T);
+                if (dc.ShowDialog() == true)
+                {
+                    this.AddClient(dc.ContextClient as T);
+                }        
+        }
+
         public ObservableCollection<T> Clients { get => clients; set => clients = value; }
         public string Name { get => name; set => name = value; }
 
