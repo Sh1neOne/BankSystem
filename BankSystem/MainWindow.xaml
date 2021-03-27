@@ -6,45 +6,131 @@
         xmlns:local="clr-namespace:BankSystem"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
+           
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
-    
+            <RowDefinition Height="200"></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
                     Orientation="Vertical"
+                    Margin="3"
+                    Height="200"
                     >
+            <Label>Отделы</Label>
             <ListBox  x:Name="DepartamentsList"                    
                       VerticalAlignment="Stretch"
                       Margin="2"
                       HorizontalAlignment="Stretch"
-                      MinHeight="30" SelectionChanged="DepartamentsList_SelectionChanged"
-                      IsSynchronizedWithCurrentItem="True"
+                      MinHeight="30"
                       DisplayMemberPath="Name"
+                      IsSynchronizedWithCurrentItem="True"
+                      ItemsSource="{Binding}" Height="134"
                       >
             </ListBox>
-            <Button x:Name="AddClient" Click="AddClient_Click">Добавить клиента</Button>
         </StackPanel>
-        <ListView x:Name="ClientListView"
-                  Grid.Row="0"
-                  Grid.Column="1"
-                  Height="300"
-                  ItemsSource="{Binding Path = Clients}"
-                  >
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = Id}">ID</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = FirstName}">FirstName</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path = LastName}">LastName</GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+
+        <DockPanel LastChildFill="True"
+                   Grid.Row="0"
+                   Grid.Column="1"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"
+                   Height="200"
+                   >
+            <Label DockPanel.Dock="Top">Клиенты</Label>
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Horizontal"
+                        Height="30"
+                        Width="Auto" HorizontalAlignment="Left"
+                       >
+                <Button x:Name="AddClient" Click="AddClient_Click">
+                    <Image Source="/Images/flat-style-circle-add_icon-icons.com_66944.png" />
+                </Button>
+                <Button x:Name="EditClient" Click="EditClient_Click">
+                    <Image Source="/Images/flat-style-circle-edit_icon-icons.com_66939.png" />
+                </Button>
+                <Button x:Name="DeleteClient" Click="DeleteClient_Click">
+                    <Image Source="/Images/flat-style-circle-delete-trash_icon-icons.com_66945.png" />
+                </Button>
+            </StackPanel>
+            <ListView x:Name="ClientListView"
+
+                      ItemsSource="{Binding Path = Clients}"   
+                      IsSynchronizedWithCurrentItem="True"
+                      >
+                <ListView.View>
+                    <GridView >
+                        <GridViewColumn DisplayMemberBinding="{Binding Path = Id}">ID</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path = FirstName}">Имя</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path = LastName}">Фамилия</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path = TotalBalance}">Общий баланс</GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+
+        <DockPanel LastChildFill="True"
+                   Grid.Column="0"
+                   Grid.Row="1"
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Stretch"
+                   >
+            <Label DockPanel.Dock="Top">Счета</Label>
+
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Horizontal"
+                        Height="30"
+                        Width="Auto" HorizontalAlignment="Left"
+                       >
+                <Button x:Name="AddAccount" Click="AddAccount_Click">
+                    <Image Source="/Images/flat-style-circle-add_icon-icons.com_66944.png" />
+                </Button>
+                <Button x:Name="InformationAccount" Click="InformationClient_Click">
+                    <Image Source="/Images/article_icon_174038.png" />
+                </Button>
+                <Button x:Name="DeleteAccount" Click="DeleteAccount_Click">
+                    <Image Source="/Images/flat-style-circle-delete-trash_icon-icons.com_66945.png" />
+                </Button>
+            </StackPanel>
+            <ListView x:Name="AccountsListBox"            
+                 DisplayMemberPath="Name"
+                 ItemsSource="{Binding Path = Clients/Accounts}">
+                
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Наименование</GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Balance}">Баланс</GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            
+        </DockPanel>
+        <StackPanel Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="5">
+            <Label>Переводы</Label>
+            <TextBlock>Счет списания:</TextBlock>
+            <StackPanel Orientation="Horizontal" >
+                <Button x:Name="accountFromButton" Click="accountFromButton_Click">--></Button>
+                <ListBox x:Name="accountFromListBox" Width="300" Margin="5,0" DisplayMemberPath="Name"></ListBox>
+            </StackPanel>
+            <TextBlock>Счет зачисления:</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="accountToButton" Click="accountToButton_Click">--></Button>
+                <ListBox x:Name="accountToListBox" Width="300" Margin="5,0" DisplayMemberPath="Name"></ListBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                <TextBlock>Сумма перевода:</TextBlock>
+                <TextBox x:Name="sumTextBox"
+                    Width="232"></TextBox>
+            </StackPanel>
+            <Button x:Name="transfer" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="transfer_Click"> Перевести</Button>
+        </StackPanel>
     </Grid>
 </Window>

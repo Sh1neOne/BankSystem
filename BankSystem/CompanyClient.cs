@@ -8,9 +8,13 @@ namespace BankSystem
 {
     class CompanyClient : Client
     {
+        public CompanyClient() : base()
+        {
+            
+        }
+
         public CompanyClient(string firstName, string lastName) : base(firstName, lastName)
         {
         }
-
     }
 }

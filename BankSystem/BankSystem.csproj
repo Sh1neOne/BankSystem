@@ -55,14 +55,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AccountDialog.xaml.cs">
+      <DependentUpon>AccountDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CompanyClient.cs" />
     <Compile Include="Departament.cs" />
+    <Compile Include="DepositAccount.cs" />
     <Compile Include="DialogClient.xaml.cs">
       <DependentUpon>DialogClient.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IClient.cs" />
     <Compile Include="StandartClient.cs" />
     <Compile Include="VIPClient.cs" />
+    <Page Include="AccountDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DialogClient.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -108,6 +115,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flat-style-circle-add_icon-icons.com_66944.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flat-style-circle-edit_icon-icons.com_66939.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\flat-style-circle-delete-trash_icon-icons.com_66945.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\article_icon_174038.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -33,6 +33,7 @@ namespace BankSystem
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
+            ContextClient.GoodCreditHistory = goodCreditHistoryCheckBox.IsEnabled;
         }
     }
 }

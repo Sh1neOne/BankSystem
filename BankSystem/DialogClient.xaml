@@ -28,8 +28,8 @@
                 </Binding>
             </TextBox>
             <TextBlock>Хорошая кредитная история</TextBlock>
-            <CheckBox x:Name="goodCreditHistory">
-                <Binding Path="GoodCreditHistory"></Binding>
+            <CheckBox x:Name="goodCreditHistoryCheckBox" IsChecked="{Binding Path=GoodCreditHistory}">
+            
             </CheckBox>
             <WrapPanel  HorizontalAlignment="Right" Margin="0,15,0,0">
                 <Button IsDefault="True" Click="Accept_Click" MinWidth="60" Margin="0,0,10,0">OK</Button>

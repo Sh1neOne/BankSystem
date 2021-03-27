@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    class StandartClient : Client,IClient<Client>
+    class StandartClient : Client
     {
+        public StandartClient() : base()
+        {
+        }
+
         public StandartClient(string firstName, string lastName) : base(firstName, lastName)
         {
         }
