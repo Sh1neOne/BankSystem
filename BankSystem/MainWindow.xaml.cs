@@ -24,10 +24,13 @@ namespace BankSystem
     public partial class MainWindow : Window
     {
         Bank bank;
+        //LogsTransactions logs;
         public MainWindow()
         {
             InitializeComponent();
             bank = new Bank();
+            //logs = new LogsTransactions();
+           
             this.DataContext = bank.DepartamentList;
             AccountsListBox.DataContext = this.DataContext;
         }
@@ -148,9 +151,14 @@ namespace BankSystem
                 MessageBox.Show("Введите корректную сумму!");                
                 return;
             }
-            Account.BalanceTransfer(accountFrom, accountTo, sum);
+            accountFrom.BalanceTransferTo(accountTo, sum);
             ClientListView.Items.Refresh();
             MessageBox.Show("Перевод выполнен");
+        }
+
+        private void logsTransactions_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(LogsTransactions.PrintLogs());
         }
     }
 }

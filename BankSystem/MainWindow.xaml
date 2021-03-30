@@ -131,6 +131,7 @@
                     Width="232"></TextBox>
             </StackPanel>
             <Button x:Name="transfer" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="transfer_Click"> Перевести</Button>
+            <Button x:Name="logsTransactions" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="logsTransactions_Click">Список транзакций</Button>
         </StackPanel>
     </Grid>
 </Window>

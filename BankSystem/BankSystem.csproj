@@ -65,6 +65,7 @@
       <DependentUpon>DialogClient.xaml</DependentUpon>
     </Compile>
     <Compile Include="StandartClient.cs" />
+    <Compile Include="LogsTransactions.cs" />
     <Compile Include="VIPClient.cs" />
     <Page Include="AccountDialog.xaml">
       <SubType>Designer</SubType>

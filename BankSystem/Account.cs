@@ -13,7 +13,10 @@ namespace BankSystem
         protected string name;
         private double balance;
 
+        public static event Action<Account,Account,double> CommitTransaction;
 
+        public Action<string, Account> BalanceChanged;
+   
         public Account(string name, double balance = 0)
         {
             Name = name;
@@ -25,12 +28,13 @@ namespace BankSystem
         /// <param name="accountFrom"></param>
         /// <param name="accountTo"></param>
         /// <param name="sum"></param>
-        public static void BalanceTransfer(Account accountFrom, Account accountTo, double sum)
+        public void BalanceTransferTo(Account accountTo, double sum)
         {
-            accountFrom.Balance -= sum;
+            this.Balance -= sum;
             accountTo.Balance += sum;
-     
-        }
+            CommitTransaction?.Invoke(this, accountTo, sum);
+
+        } 
 
         /// <summary>
         /// Метод возвращает информацию о счете
@@ -53,6 +57,7 @@ namespace BankSystem
             set
             {
                 balance = value;
+                BalanceChanged?.Invoke(value.ToString(), this);
                 OnPropertyChanged();           
             }
         }

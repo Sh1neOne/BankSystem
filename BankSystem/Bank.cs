@@ -50,7 +50,7 @@ namespace BankSystem
                 AddRandomAccounts(cmpCl);
 
             }
-
+            Account.CommitTransaction += LogsTransactions.AddTransaction;
         }          
 
         /// <summary>
@@ -59,17 +59,17 @@ namespace BankSystem
         /// <param name="client"></param>
         public void AddRandomAccounts(Client client)
         {
-            var CountAcc = rnd.Next(1, 7);
+            var CountAcc = rnd.Next(3, 7);
             for (int i = 1; i <= CountAcc; i++)
             {
                 var rndAccType = rnd.Next(2);
                 switch (rndAccType)
                 {
                     case 0:
-                        client.Accounts.Add(new Account(i.ToString(), rnd.Next(5) * 1000));
+                        client.AddAccouunt(new Account(i.ToString(), rnd.Next(5) * 1000));                        
                         break;
                     case 1:
-                        client.Accounts.Add(new DepositAccount(i.ToString(), rnd.Next(1, 5) * 1000, Convert.ToBoolean(rnd.Next(1)), rnd.Next(1, 13), rnd.Next(1,13)));
+                        client.AddAccouunt(new DepositAccount(i.ToString(), rnd.Next(1, 5) * 1000, Convert.ToBoolean(rnd.Next(1)), rnd.Next(1, 13), rnd.Next(1,13)));
                         break;
                     default:
                         break;

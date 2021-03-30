@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BankSystem
 {
@@ -17,6 +18,7 @@ namespace BankSystem
         private ObservableCollection<Account> accounts;
         private bool goodCreditHistory;
 
+        public event Action<Account, int> ChangeBalance;  
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Client() : this("", "")
@@ -47,10 +49,23 @@ namespace BankSystem
             AccountDialog ad = new AccountDialog(this);
             if (ad.ShowDialog() == true)
             {
-                Accounts.Add(ad.Account);
+                AddAccouunt(ad.Account);
                 OnPropertyChanged("TotalBalance");
             }
         }
+
+        public void NotifyClient(string message, Account account)
+        {
+            MessageBox.Show($"Клиент:{this.LastName}! Изменился баланс на счете {account.Name}. Текущий баланс {message}");
+        }
+     
+
+        public void AddAccouunt(Account account)
+        {
+            Accounts.Add(account);
+            account.BalanceChanged = NotifyClient;
+        }
+
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
