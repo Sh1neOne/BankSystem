@@ -17,8 +17,6 @@ namespace BankSystem
         private string id;
         private ObservableCollection<Account> accounts;
         private bool goodCreditHistory;
-
-        public event Action<Account, int> ChangeBalance;  
         public event PropertyChangedEventHandler PropertyChanged;
 
         public Client() : this("", "")
@@ -49,23 +47,32 @@ namespace BankSystem
             AccountDialog ad = new AccountDialog(this);
             if (ad.ShowDialog() == true)
             {
-                AddAccouunt(ad.Account);
+                AddAccount(ad.Account);
                 OnPropertyChanged("TotalBalance");
             }
         }
 
-        public void NotifyClient(string message, Account account)
-        {
-            MessageBox.Show($"Клиент:{this.LastName}! Изменился баланс на счете {account.Name}. Текущий баланс {message}");
-        }
-     
-
-        public void AddAccouunt(Account account)
+        /// <summary>
+        /// Метод добавляющий счет клиенту
+        /// </summary>
+        /// <param name="account"></param>
+        public void AddAccount(Account account)
         {
             Accounts.Add(account);
-            account.BalanceChanged = NotifyClient;
+            account.BalanceChanged += Account_BalanceChanged;
         }
 
+        /// <summary>
+        /// Метод для обработки оповещения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Account_BalanceChanged(object sender, Account.AccountEventArgs e)
+        {
+            var acc = sender as Account;
+            MessageBox.Show($"Клиент:{this.LastName}! Изменился баланс на счете {acc.Name}. Текущий баланс {e.msg}");
+    
+        }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -80,8 +87,6 @@ namespace BankSystem
             Accounts.Remove(acc);
             OnPropertyChanged("TotalBalance");
         }
-
- 
 
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }

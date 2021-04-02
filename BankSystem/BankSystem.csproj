@@ -58,12 +58,14 @@
     <Compile Include="AccountDialog.xaml.cs">
       <DependentUpon>AccountDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AccountException.cs" />
     <Compile Include="CompanyClient.cs" />
     <Compile Include="Departament.cs" />
     <Compile Include="DepositAccount.cs" />
     <Compile Include="DialogClient.xaml.cs">
       <DependentUpon>DialogClient.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions.cs" />
     <Compile Include="StandartClient.cs" />
     <Compile Include="LogsTransactions.cs" />
     <Compile Include="VIPClient.cs" />
@@ -128,6 +130,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\article_icon_174038.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BankLibrary\BankLibrary.csproj">
+      <Project>{426b90d0-7314-4020-a140-90d6d543eb18}</Project>
+      <Name>BankLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -42,6 +42,7 @@ namespace BankSystem
         public void AddClientDialog()
         {
             T newClient = new T();
+       
             DialogClient dc = new DialogClient(newClient as T);
             if (dc.ShowDialog() == true)
             {

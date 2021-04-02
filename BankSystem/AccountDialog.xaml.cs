@@ -46,34 +46,41 @@ namespace BankSystem
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             Type selectTypeAccount = ((KeyValuePair<String, Type>)(AccountType.SelectedItem)).Value;
-        
+
             if (!Int32.TryParse(balanceTextBox.Text, out int balance))
             {
                 MessageBox.Show("Баланс введен не корректно!");
                 return;
             }
-            
-            if ( (!Int32.TryParse(countMonthTextBox.Text, out int countMonth) || countMonth < 1) && (selectTypeAccount == typeof(DepositAccount)  )) 
+
+            if ((!Int32.TryParse(countMonthTextBox.Text, out int countMonth) || countMonth < 1) && (selectTypeAccount == typeof(DepositAccount)))
             {
                 MessageBox.Show("Не верно указано количество месяцеы");
                 return;
             }
 
 
-            if (selectTypeAccount == typeof(DepositAccount))
+            try
             {
-                Account = new DepositAccount(nametextBox.Text,
-                                             balance,
-                                             Convert.ToBoolean(capitalizaztionCheckBox.IsChecked),
-                                             Convert.ToInt32(interestRateComboBox.Text),
-                                             countMonth);
+                if (selectTypeAccount == typeof(DepositAccount))
+                {
+                    Account = new DepositAccount(nametextBox.Text,
+                                                 balance,
+                                                 Convert.ToBoolean(capitalizaztionCheckBox.IsChecked),
+                                                 Convert.ToInt32(interestRateComboBox.Text),
+                                                 countMonth);
+                }
+                else
+                {
+                    Account = new Account(nametextBox.Text,
+                                          balance);
+                }
+                this.DialogResult = true;
             }
-            else
+            catch (AccountException ex)
             {
-                Account = new Account(nametextBox.Text,
-                                      balance);
+                MessageBox.Show(ex.Message);
             }
-            this.DialogResult = true;
 
         }
 

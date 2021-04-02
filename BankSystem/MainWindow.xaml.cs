@@ -79,7 +79,7 @@ namespace BankSystem
         private void InformationClient_Click(object sender, RoutedEventArgs e)
         {
             var selAccount = AccountsListBox.SelectedItem as Account;
-            MessageBox.Show(selAccount.InformationAccount());
+            MessageBox.Show(selAccount?.InformationAccount()??"Выберите счет");
          
         }
 
@@ -103,7 +103,8 @@ namespace BankSystem
         {
             var selClient = ClientListView.SelectedItem as Client;
             var selAccount = AccountsListBox.SelectedItem as Account;
-            selClient.DeleteAccount(selAccount);
+            selAccount.DelAccount(selClient);
+
         }
 
         /// <summary>

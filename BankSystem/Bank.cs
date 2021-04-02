@@ -66,10 +66,10 @@ namespace BankSystem
                 switch (rndAccType)
                 {
                     case 0:
-                        client.AddAccouunt(new Account(i.ToString(), rnd.Next(5) * 1000));                        
+                        client.AddAccount(new Account(i.ToString(), rnd.Next(5) * 1000));                        
                         break;
                     case 1:
-                        client.AddAccouunt(new DepositAccount(i.ToString(), rnd.Next(1, 5) * 1000, Convert.ToBoolean(rnd.Next(1)), rnd.Next(1, 13), rnd.Next(1,13)));
+                        client.AddAccount(new DepositAccount(i.ToString(), rnd.Next(1, 5) * 1000, Convert.ToBoolean(rnd.Next(1)), rnd.Next(1, 13), rnd.Next(1,13)));
                         break;
                     default:
                         break;

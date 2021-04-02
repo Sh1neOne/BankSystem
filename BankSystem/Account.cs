@@ -13,9 +13,10 @@ namespace BankSystem
         protected string name;
         private double balance;
 
+        public event EventHandler<AccountEventArgs> BalanceChanged;
         public static event Action<Account,Account,double> CommitTransaction;
 
-        public Action<string, Account> BalanceChanged;
+        //public event Action<string, Account> BalanceChanged;
    
         public Account(string name, double balance = 0)
         {
@@ -52,12 +53,36 @@ namespace BankSystem
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        public class AccountEventArgs : EventArgs
+        {
+            public readonly string msg;
+            public AccountEventArgs(string messsage)
+            {
+                msg = messsage;
+            }
+        }
+
+        /// <summary>
+        /// Перегрузка оператора +
+        /// </summary>
+        /// <param name="ac1"></param>
+        /// <param name="ac2"></param>
+        /// <returns></returns>
+        public static Account operator +(Account ac1, Account ac2)
+        {
+            return new Account($"{ac1.Name} {ac2.Name}", ac1.Balance + ac2.Balance);
+        }
+
         public virtual string Name { get =>$"Стандартный счет {name}"; set => name = value; }
         public double Balance { get => balance; 
             set
             {
+                if (value < 0)
+                {
+                    throw new AccountException("Баланс не может быть отрицательным", value.ToString());
+                }
                 balance = value;
-                BalanceChanged?.Invoke(value.ToString(), this);
+                BalanceChanged?.Invoke(this, new AccountEventArgs(value.ToString()));
                 OnPropertyChanged();           
             }
         }

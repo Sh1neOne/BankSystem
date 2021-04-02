@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BankLibrary;
 
 namespace BankSystem
 {
@@ -34,17 +35,13 @@ namespace BankSystem
         {
             double balanceDeposit = Balance;
             if (!Capitalization)
-            {
-                balanceDeposit += (balanceDeposit * interestRate / 100) * mountCount/12;
+            {          
+                return CalculateDeposit.CalculateWithoutCapitalization(balanceDeposit, mountCount, interestRate);
             }
             else
             {
-                for (int i = 0; i < mountCount; i++)
-                {
-                    balanceDeposit += balanceDeposit * interestRate / 100 / 12;
-                }
+                return CalculateDeposit.CalculateWithCapitalization(balanceDeposit, mountCount, interestRate);    
             }
-            return balanceDeposit;
         }
 
         
@@ -55,9 +52,7 @@ namespace BankSystem
                    $"Капитализация: {Capitalization}\n" +
                    $"Процентная ставка: {InterestRate}\n" +
                    $"Количество месяцев: {MountCount}\n" +
-                   $"Сумма накопленная на окончание срока депозита: {Convert.ToString(CalculateDepositSum())}";
-                
-          
+                   $"Сумма накопленная на окончание срока депозита: {Convert.ToString(CalculateDepositSum())}";                      
         }
      
     }
