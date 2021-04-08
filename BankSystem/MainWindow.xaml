@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BankSystem"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -132,6 +132,8 @@
             </StackPanel>
             <Button x:Name="transfer" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="transfer_Click"> Перевести</Button>
             <Button x:Name="logsTransactions" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="logsTransactions_Click">Список транзакций</Button>
+            <Button x:Name="generateTransaction" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="generateTransaction_Click">Сгенерировать транзакции</Button>
+            <Button x:Name="saveTransactionToJSON" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="saveTransactionToJSON_Click">Сохранить транзакции</Button>
         </StackPanel>
     </Grid>
 </Window>

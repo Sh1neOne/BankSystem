@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    class LogsTransactions
+    class LogsTransactions 
     {
         private DateTime dateTransaction;
         private Account accountFrom;
@@ -40,10 +41,14 @@ namespace BankSystem
         {
             listTransaction.Add(new LogsTransactions(accountFrom, accountTo, sumTrans));
         }
+
+       
+ 
+
         public Account AccountFrom { get => accountFrom; set => accountFrom = value; }
         public Account AccountTo { get => accountTo; set => accountTo = value; }
         public double SumTransaction { get => sumTransaction; set => sumTransaction = value; }
-        internal List<LogsTransactions> ListTransaction { get => listTransaction; set => listTransaction = value; }
+        public static List<LogsTransactions> ListTransaction { get => listTransaction; set => listTransaction = value; }
         public DateTime DateTransaction { get => dateTransaction; set => dateTransaction = value; }
     }
 }

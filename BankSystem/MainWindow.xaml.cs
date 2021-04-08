@@ -1,7 +1,10 @@
 ﻿
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -160,6 +163,57 @@ namespace BankSystem
         private void logsTransactions_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(LogsTransactions.PrintLogs());
+        }
+
+        private void generateTransaction_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (accountFromListBox.Items.Count < 1 || accountToListBox.Items.Count < 1)
+            {
+                MessageBox.Show("Укажите счета");
+                return;
+            }
+
+            Account accountFrom = accountFromListBox.Items[0] as Account;
+            Account accountTo = accountToListBox.Items[0] as Account;
+
+            Task task = new Task(()=>
+            {
+                for (int i = 0; i < 10_000_000; i++)
+                {
+                    LogsTransactions.AddTransaction(accountFrom, accountTo, 1);
+                }
+            });
+            task.Start();
+            //task.Wait();
+            //ParallelLoopResult result = Parallel.For(0, 500, _ => 
+            //{
+            //    LogsTransactions.AddTransaction(accountFrom, accountTo, 1);
+            //    LogsTransactions.AddTransaction(accountFrom, accountTo, -1);
+
+
+            if(task.IsCompleted)
+            {
+                MessageBox.Show("Транзакции созданы");
+            }
+
+        }
+
+        private void saveTransactionToJSON_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            dlg.FileName = "organisation";
+            dlg.DefaultExt = ".json";
+            dlg.Filter = "json (.json)|*.json";
+
+            Nullable<bool> result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                // Save document
+                string filename = dlg.FileName;
+                Task.Factory.StartNew(()=> File.WriteAllText(filename, JsonConvert.SerializeObject(LogsTransactions.ListTransaction)));              
+            }
         }
     }
 }
