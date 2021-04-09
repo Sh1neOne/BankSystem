@@ -43,7 +43,7 @@ namespace BankSystem
         }
 
        
- 
+  
 
         public Account AccountFrom { get => accountFrom; set => accountFrom = value; }
         public Account AccountTo { get => accountTo; set => accountTo = value; }

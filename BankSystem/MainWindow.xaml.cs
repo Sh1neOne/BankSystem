@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -32,8 +33,7 @@ namespace BankSystem
         {
             InitializeComponent();
             bank = new Bank();
-            //logs = new LogsTransactions();
-           
+
             this.DataContext = bank.DepartamentList;
             AccountsListBox.DataContext = this.DataContext;
         }
@@ -47,7 +47,7 @@ namespace BankSystem
             var t = DepartamentsList.SelectedItem;
             MethodInfo mi = t.GetType().GetMethod("AddClientDialog");
             object[] args = { };
-            mi.Invoke(t, args); 
+            mi.Invoke(t, args);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace BankSystem
             var SelClient = ClientListView.SelectedItem as Client;
             MethodInfo mi = SelDep.GetType().GetMethod("DeleteClient");
             object[] args = { SelClient };
-            mi.Invoke(SelDep, args);     
+            mi.Invoke(SelDep, args);
         }
 
         /// <summary>
@@ -82,8 +82,8 @@ namespace BankSystem
         private void InformationClient_Click(object sender, RoutedEventArgs e)
         {
             var selAccount = AccountsListBox.SelectedItem as Account;
-            MessageBox.Show(selAccount?.InformationAccount()??"Выберите счет");
-         
+            MessageBox.Show(selAccount?.InformationAccount() ?? "Выберите счет");
+
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace BankSystem
             }
             if (!Int32.TryParse(sumTextBox.Text, out int sum))
             {
-                MessageBox.Show("Введите корректную сумму!");                
+                MessageBox.Show("Введите корректную сумму!");
                 return;
             }
             accountFrom.BalanceTransferTo(accountTo, sum);
@@ -177,7 +177,7 @@ namespace BankSystem
             Account accountFrom = accountFromListBox.Items[0] as Account;
             Account accountTo = accountToListBox.Items[0] as Account;
 
-            Task task = new Task(()=>
+            Task task = new Task(() =>
             {
                 for (int i = 0; i < 10_000_000; i++)
                 {
@@ -185,34 +185,72 @@ namespace BankSystem
                 }
             });
             task.Start();
-            //task.Wait();
-            //ParallelLoopResult result = Parallel.For(0, 500, _ => 
-            //{
-            //    LogsTransactions.AddTransaction(accountFrom, accountTo, 1);
-            //    LogsTransactions.AddTransaction(accountFrom, accountTo, -1);
-
-
-            if(task.IsCompleted)
-            {
-                MessageBox.Show("Транзакции созданы");
-            }
+            task.ContinueWith(_ => MessageBox.Show("Транзакции созданы"));
 
         }
 
         private void saveTransactionToJSON_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.FileName = "organisation";
-            dlg.DefaultExt = ".json";
-            dlg.Filter = "json (.json)|*.json";
-
-            Nullable<bool> result = dlg.ShowDialog();
-
-            if (result == true)
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
-                // Save document
-                string filename = dlg.FileName;
-                Task.Factory.StartNew(()=> File.WriteAllText(filename, JsonConvert.SerializeObject(LogsTransactions.ListTransaction)));              
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    var path = dialog.SelectedPath + "\\";
+                    string filename = "log";        
+                    var t = Task.Factory.StartNew(() =>
+                    {
+                        int j = 0;
+                        var tempList = new List<LogsTransactions>() { LogsTransactions.ListTransaction[0] };
+                        for (int i = 1; i < LogsTransactions.ListTransaction.Count; i++)
+                        {
+                           
+                            tempList.Add(LogsTransactions.ListTransaction[i]);
+                            if (i % 1_000_000 == 0)
+                            {
+                                using (var sw = new StreamWriter($"{path + filename + j++.ToString()}.json"))
+                                {
+                                    sw.Write(JsonConvert.SerializeObject(tempList));
+                                }
+                                tempList.Clear();
+                            }
+                        }
+                        File.WriteAllText($"{path + filename + j++.ToString()}.json", JsonConvert.SerializeObject(tempList));
+                    }
+                    );
+                    t.ContinueWith(_ => MessageBox.Show("Сохранение выполнено"));
+                }
+            }
+
+        }
+
+        private void loadTransactionFromJSON_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    var path = dialog.SelectedPath + "\\";
+                    var files = Directory.GetFiles(path);
+
+                    var par = Parallel.ForEach(files, file =>
+                     {
+                         using (var reader = new StreamReader(file))
+                         {
+                             using (var jsonReader = new JsonTextReader(reader))
+                             {
+                                 var serializer = new JsonSerializer();
+                                 LogsTransactions.ListTransaction.AddRange(serializer.Deserialize<List<LogsTransactions>>(jsonReader));
+                             }
+                         }
+                     }
+                    );
+                    if (par.IsCompleted)
+                    {
+                        MessageBox.Show("Загрузка завершена");
+                    }
+                }
             }
         }
     }

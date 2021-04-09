@@ -134,6 +134,7 @@
             <Button x:Name="logsTransactions" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="logsTransactions_Click">Список транзакций</Button>
             <Button x:Name="generateTransaction" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="generateTransaction_Click">Сгенерировать транзакции</Button>
             <Button x:Name="saveTransactionToJSON" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="saveTransactionToJSON_Click">Сохранить транзакции</Button>
+            <Button x:Name="loadTransactionFromJSON" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="loadTransactionFromJSON_Click">Загрузить транзакции</Button>
         </StackPanel>
     </Grid>
 </Window>
