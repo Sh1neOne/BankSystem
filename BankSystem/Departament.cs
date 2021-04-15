@@ -12,17 +12,23 @@ namespace BankSystem
 
     {
         private ObservableCollection<T> clients;
-        private string name;
+        public static Action<Client, int> addClientInDb;
+        public static Action<Client> deleteClientInDb;
 
-        public Departament(string name)
+        private string name;
+        private int id;
+
+        public Departament(string name, int id)
         {
             Clients = new ObservableCollection<T>();
             Name = name;
+            Id = id;
         }
 
         public void AddClient(T client)
         {
             Clients.Add(client);
+            addClientInDb?.Invoke(client, this.Id);
         }
         /// <summary>
         /// Метод возвращает коллекцию клиентов определенного типа из общего списка
@@ -57,11 +63,13 @@ namespace BankSystem
         public void DeleteClient(T client)
         {
             Clients.Remove(client);
+            deleteClientInDb?.Invoke(client);
         }
 
-       
+ 
+
         public ObservableCollection<T> Clients { get => clients; set => clients = value; }
         public string Name { get => name; set => name = value; }
-
+        public int Id { get => id; set => id = value; }
     }
 }

@@ -12,7 +12,7 @@ namespace BankSystem
         {
         }
 
-        public StandartClient(string firstName, string lastName) : base(firstName, lastName)
+        public StandartClient(string firstName, string lastName, int id) : base(firstName, lastName, id)
         {
         }
     }

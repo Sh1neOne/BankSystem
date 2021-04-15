@@ -64,6 +64,7 @@
     </Compile>
     <Compile Include="AccountException.cs" />
     <Compile Include="CompanyClient.cs" />
+    <Compile Include="DataBase\BankSQL.cs" />
     <Compile Include="Departament.cs" />
     <Compile Include="DepositAccount.cs" />
     <Compile Include="DialogClient.xaml.cs">
@@ -141,6 +142,9 @@
       <Project>{426b90d0-7314-4020-a140-90d6d543eb18}</Project>
       <Name>BankLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DataBase\InitScript.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

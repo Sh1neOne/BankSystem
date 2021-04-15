@@ -12,17 +12,18 @@ namespace BankSystem
         private bool capitalization;
         private int mountCount;
         private int interestRate;
-        public DepositAccount(string name, int balance = 0) : base(name, balance)
+        public DepositAccount(string name, int balance = 0, int id = -1) : base(name, balance, id)
         {
         }
-        public DepositAccount(string name, int balance, bool capitalization, int interestRate, int mountCount) : this(name, balance)
+        public DepositAccount(string name, int balance, bool capitalization, int interestRate, int mountCount, int id = -1) : this(name, balance)
         {
             Capitalization = capitalization;
             InterestRate = interestRate;
             MountCount = mountCount;
+            Id = id;
         }
 
-        public override string Name { get => $"Депозитный счет {base.name}"; set => base.Name = value; }
+        public override string Name { get => base.name; set => base.Name = value; }
         public bool Capitalization { get => capitalization; set => capitalization = value; }
         public int InterestRate { get => interestRate; set => interestRate = value; }
         public int MountCount { get => mountCount; set => mountCount = value; }

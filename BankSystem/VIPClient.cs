@@ -12,7 +12,7 @@ namespace BankSystem
         {
         }
 
-        public VIPClient(string firstName, string lastName) : base(firstName, lastName)
+        public VIPClient(string firstName, string lastName, int id) : base(firstName, lastName, id)
         {
         }
     }

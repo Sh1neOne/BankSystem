@@ -83,7 +83,6 @@ namespace BankSystem
         {
             var selAccount = AccountsListBox.SelectedItem as Account;
             MessageBox.Show(selAccount?.InformationAccount() ?? "Выберите счет");
-
         }
 
         /// <summary>

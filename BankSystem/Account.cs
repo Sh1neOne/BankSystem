@@ -12,16 +12,19 @@ namespace BankSystem
     {
         protected string name;
         private double balance;
-
+        private int id;
+        
         public event EventHandler<AccountEventArgs> BalanceChanged;
         public static event Action<Account,Account,double> CommitTransaction;
+        public static event Action<Account> BalanceChagedInDb;
 
         //public event Action<string, Account> BalanceChanged;
    
-        public Account(string name, double balance = 0)
+        public Account(string name, double balance = 0, int id = -1)
         {
             Name = name;
             Balance = balance;
+            Id = id;       
         }
         /// <summary>
         /// Метод осуществляет перевод денег му счетами
@@ -34,7 +37,6 @@ namespace BankSystem
             this.Balance -= sum;
             accountTo.Balance += sum;
             CommitTransaction?.Invoke(this, accountTo, sum);
-
         } 
 
         /// <summary>
@@ -62,18 +64,8 @@ namespace BankSystem
             }
         }
 
-        /// <summary>
-        /// Перегрузка оператора +
-        /// </summary>
-        /// <param name="ac1"></param>
-        /// <param name="ac2"></param>
-        /// <returns></returns>
-        public static Account operator +(Account ac1, Account ac2)
-        {
-            return new Account($"{ac1.Name} {ac2.Name}", ac1.Balance + ac2.Balance);
-        }
 
-        public virtual string Name { get =>$"Стандартный счет {name}"; set => name = value; }
+        public virtual string Name { get => name; set => name = value; }
         public double Balance { get => balance; 
             set
             {
@@ -83,8 +75,16 @@ namespace BankSystem
                 }
                 balance = value;
                 BalanceChanged?.Invoke(this, new AccountEventArgs(value.ToString()));
+                BalanceChagedInDb?.Invoke(this);
                 OnPropertyChanged();           
             }
         }
+
+        public int Id
+        {
+            get => id;
+            set => id = value;
+        }
+             
     }
 }

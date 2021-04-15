@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BankSystem.DataBase;
 
 namespace BankSystem
 {
@@ -25,10 +28,37 @@ namespace BankSystem
         /// </summary>
         public Bank()
         {
+            SqlConnectionStringBuilder connectStrBuilder = new SqlConnectionStringBuilder
+            {
+                DataSource = @"(localdb)\MSSQLLocalDB",
+                InitialCatalog = "BankSystemDB",
+                IntegratedSecurity = true
+            };
 
-            VipDepartament = new Departament<VIPClient>("Отдел работы с VIP клиентами");
-            StandartDepartament = new Departament<StandartClient>("Отдел работы с обычными клиентами");
-            CompanyDepartament = new Departament<CompanyClient>("Отдел работы с юридическими лицами");
+            VipDepartament = new Departament<VIPClient>("Отдел работы с VIP клиентами", 3);
+            StandartDepartament = new Departament<StandartClient>("Отдел работы с обычными клиентами", 1);
+            CompanyDepartament = new Departament<CompanyClient>("Отдел работы с юридическими лицами", 2);
+          
+            var DepSql = new BankSQL(connectStrBuilder);
+            DepSql.ReadDataInDB(this);
+            Account.BalanceChagedInDb += DepSql.UpdateAccountInDB;
+            Account.CommitTransaction += LogsTransactions.AddTransaction;
+            Client.accountSaveInDb += DepSql.AddAccountInDB;
+            Client.accountDeleteInDb += DepSql.DeleteAccountInDb;
+            Client.clientUpdateInDb += DepSql.UpdateClientInDB;
+            Departament<CompanyClient>.addClientInDb += DepSql.AddClientInDB;
+            Departament<VIPClient>.addClientInDb += DepSql.AddClientInDB;
+            Departament<StandartClient>.addClientInDb += DepSql.AddClientInDB;
+            Departament<CompanyClient>.deleteClientInDb += DepSql.DeleteClientInDB;
+            Departament<VIPClient>.deleteClientInDb += DepSql.DeleteClientInDB;
+            Departament<StandartClient>.deleteClientInDb += DepSql.DeleteClientInDB;
+        }          
+      
+        /// <summary>
+        /// Генерация случайных данных
+        /// </summary>
+        public void GenerateData()
+        {
             DepartamentList = new ArrayList
             {
                 VipDepartament,
@@ -37,21 +67,20 @@ namespace BankSystem
             };
             for (int i = 1; i <= 5; i++)
             {
-                var vipCl = new VIPClient($"ВИП Имя_{i}", $"Фамилия_{i}");
+                var vipCl = new VIPClient($"ВИП Имя_{i}", $"Фамилия_{i}", i + 1);
                 VipDepartament.AddClient(vipCl);
                 AddRandomAccounts(vipCl);
 
-                var stmdCl = new StandartClient($"Стандарт Имя_{i}", $"Фамилия_{i}");
+                var stmdCl = new StandartClient($"Стандарт Имя_{i}", $"Фамилия_{i}", i + 2);
                 StandartDepartament.AddClient(stmdCl);
                 AddRandomAccounts(stmdCl);
 
-                var cmpCl = new CompanyClient($"Компания Имя_{i}", $"Фамилия_{i}");
+                var cmpCl = new CompanyClient($"Компания Имя_{i}", $"Фамилия_{i}", i + 3);
                 CompanyDepartament.AddClient(cmpCl);
                 AddRandomAccounts(cmpCl);
 
             }
-            Account.CommitTransaction += LogsTransactions.AddTransaction;
-        }          
+        }
 
         /// <summary>
         /// Метод создает случайные счета клиентов

@@ -14,22 +14,25 @@ namespace BankSystem
     {
         private string firstName;
         private string lastName;
-        private string id;
+        private int id;
         private ObservableCollection<Account> accounts;
         private bool goodCreditHistory;
         public event PropertyChangedEventHandler PropertyChanged;
+        public static event Action<Account, int> accountSaveInDb;
+        public static event Action<Account> accountDeleteInDb;
+        public static event Action<Client> clientUpdateInDb;
 
-        public Client() : this("", "")
+        public Client() : this("", "", 0)
         {
-            Id = "";
+            Id = -1;
         }
 
-        public Client(string firstName, string lastName)
+        public Client(string firstName, string lastName, int id)
         {
             FirstName = firstName;
             LastName = lastName;
             Accounts = new ObservableCollection<Account>();
-            Id = "";
+            Id = id;
         }
         /// <summary>
         /// Метод вызывает диалог редактирования клиента
@@ -38,6 +41,7 @@ namespace BankSystem
         {
             var dc = new DialogClient(this);
             dc.ShowDialog();
+            clientUpdateInDb?.Invoke(this);
         }
         /// <summary>
         /// Метод вызывает диалог добавления клиента
@@ -60,6 +64,7 @@ namespace BankSystem
         {
             Accounts.Add(account);
             account.BalanceChanged += Account_BalanceChanged;
+            accountSaveInDb?.Invoke(account, this.Id);
         }
 
         /// <summary>
@@ -86,11 +91,12 @@ namespace BankSystem
         {
             Accounts.Remove(acc);
             OnPropertyChanged("TotalBalance");
+            accountDeleteInDb?.Invoke(acc);
         }
 
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }
-        public string Id { get => id; set => id = String.IsNullOrEmpty(value) ? Guid.NewGuid().ToString().Substring(0, 5) : value; }
+        public int Id { get => id; set => id = value; }
         public bool GoodCreditHistory { get => goodCreditHistory; set => goodCreditHistory = value; }
         public ObservableCollection<Account> Accounts { get => accounts; set => accounts = value; }
         public double TotalBalance { get => Accounts.Sum(x => x.Balance); }

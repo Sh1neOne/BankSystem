@@ -104,6 +104,7 @@
                 
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Id</GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Name}">Наименование</GridViewColumn>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Balance}">Баланс</GridViewColumn>
                     </GridView>
