@@ -12,7 +12,6 @@ namespace BankSystem.DataBase
 {
     class BankSQL
     {
-
         private string _connectionString;
         private SqlConnection _sqlConnection = null;
 
@@ -39,6 +38,30 @@ namespace BankSystem.DataBase
             {
                 _sqlConnection?.Close();
             }
+        }
+
+        public bool ConnectionAvailable()
+        {
+            bool connectAvailable = false;
+            try
+            {
+                OpenConnection();
+                if (_sqlConnection.State == ConnectionState.Open)
+                {
+                    connectAvailable = true;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                
+            }
+            finally
+            {
+                CloseConnection();
+            }
+            return connectAvailable;
         }
 
         /// <summary>

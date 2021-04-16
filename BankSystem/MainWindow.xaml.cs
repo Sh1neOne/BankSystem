@@ -27,15 +27,36 @@ namespace BankSystem
     /// </summary>\
     public partial class MainWindow : Window
     {
-        Bank bank;
         //LogsTransactions logs;
         public MainWindow()
         {
             InitializeComponent();
-            bank = new Bank();
-
-            this.DataContext = bank.DepartamentList;
+            Task<Bank> tBank = new Task<Bank>(() =>
+            {
+                return new Bank();
+            }
+            );
+            
+            tBank.Start();
+            
+            this.DataContext = tBank.Result.DepartamentList;
             AccountsListBox.DataContext = this.DataContext;
+
+            this.IsEnabled = false;
+            tBank.ContinueWith(_ =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        if (tBank.Result.DepartamentList.Count != 0)
+                        {
+                            this.IsEnabled = true;
+                        }
+                       
+                    }
+                    );
+                }
+            );
+
         }
         /// <summary>
         /// Обработчик нажатия кнопки добавить клиента
@@ -196,14 +217,14 @@ namespace BankSystem
                 if (result == System.Windows.Forms.DialogResult.OK)
                 {
                     var path = dialog.SelectedPath + "\\";
-                    string filename = "log";        
+                    string filename = "log";
                     var t = Task.Factory.StartNew(() =>
                     {
                         int j = 0;
                         var tempList = new List<LogsTransactions>() { LogsTransactions.ListTransaction[0] };
                         for (int i = 1; i < LogsTransactions.ListTransaction.Count; i++)
                         {
-                           
+
                             tempList.Add(LogsTransactions.ListTransaction[i]);
                             if (i % 1_000_000 == 0)
                             {

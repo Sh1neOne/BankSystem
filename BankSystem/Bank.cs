@@ -7,21 +7,20 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using BankSystem.DataBase;
 
 namespace BankSystem
 {
     class Bank
     {
-
-        //private ObservableCollection<Departament<Client>> listDepartaments;
         private Departament<VIPClient> vipDepartament;
         private Departament<StandartClient> standartDepartament;
         private Departament<CompanyClient> companyDepartament;
         private List<Client> allClients;
-        private ArrayList departamentList;
+        private ArrayList departamentList = new ArrayList();
         public static int interestRate = 12;
-        Random rnd = new Random();
+        private Random rnd = new Random();
 
         /// <summary>
         /// Конструктор инициализирует начальные данные
@@ -35,23 +34,28 @@ namespace BankSystem
                 IntegratedSecurity = true
             };
 
+            var BankADOSQL = new BankSQL(connectStrBuilder);
+            if (!BankADOSQL.ConnectionAvailable())
+            {
+                MessageBox.Show("Подключение к БД не доступно!");
+                return;
+            }
+            BankADOSQL.ReadDataInDB(this);
             VipDepartament = new Departament<VIPClient>("Отдел работы с VIP клиентами", 3);
             StandartDepartament = new Departament<StandartClient>("Отдел работы с обычными клиентами", 1);
             CompanyDepartament = new Departament<CompanyClient>("Отдел работы с юридическими лицами", 2);
           
-            var DepSql = new BankSQL(connectStrBuilder);
-            DepSql.ReadDataInDB(this);
-            Account.BalanceChagedInDb += DepSql.UpdateAccountInDB;
+            Account.BalanceChagedInDb += BankADOSQL.UpdateAccountInDB;
             Account.CommitTransaction += LogsTransactions.AddTransaction;
-            Client.accountSaveInDb += DepSql.AddAccountInDB;
-            Client.accountDeleteInDb += DepSql.DeleteAccountInDb;
-            Client.clientUpdateInDb += DepSql.UpdateClientInDB;
-            Departament<CompanyClient>.addClientInDb += DepSql.AddClientInDB;
-            Departament<VIPClient>.addClientInDb += DepSql.AddClientInDB;
-            Departament<StandartClient>.addClientInDb += DepSql.AddClientInDB;
-            Departament<CompanyClient>.deleteClientInDb += DepSql.DeleteClientInDB;
-            Departament<VIPClient>.deleteClientInDb += DepSql.DeleteClientInDB;
-            Departament<StandartClient>.deleteClientInDb += DepSql.DeleteClientInDB;
+            Client.accountSaveInDb += BankADOSQL.AddAccountInDB;
+            Client.accountDeleteInDb += BankADOSQL.DeleteAccountInDb;
+            Client.clientUpdateInDb += BankADOSQL.UpdateClientInDB;
+            Departament<CompanyClient>.addClientInDb += BankADOSQL.AddClientInDB;
+            Departament<VIPClient>.addClientInDb += BankADOSQL.AddClientInDB;
+            Departament<StandartClient>.addClientInDb += BankADOSQL.AddClientInDB;
+            Departament<CompanyClient>.deleteClientInDb += BankADOSQL.DeleteClientInDB;
+            Departament<VIPClient>.deleteClientInDb += BankADOSQL.DeleteClientInDB;
+            Departament<StandartClient>.deleteClientInDb += BankADOSQL.DeleteClientInDB;
         }          
       
         /// <summary>
