@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BankSystem.DataBase
 {
@@ -40,6 +41,10 @@ namespace BankSystem.DataBase
             }
         }
 
+        /// <summary>
+        /// Проверяет доступна ли база данныъ
+        /// </summary>
+        /// <returns></returns>
         public bool ConnectionAvailable()
         {
             bool connectAvailable = false;
@@ -50,12 +55,11 @@ namespace BankSystem.DataBase
                 {
                     connectAvailable = true;
                 }
-
             }
-            catch (Exception)
+            catch (SqlException e)
             {
-
-                
+                connectAvailable = false;
+                MessageBox.Show(e.Message);
             }
             finally
             {
@@ -315,8 +319,9 @@ namespace BankSystem.DataBase
                     command.ExecuteNonQuery();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 throw;
             }
             finally
@@ -422,9 +427,9 @@ namespace BankSystem.DataBase
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine(e.Message);
                 throw;
             }
             finally
@@ -451,9 +456,9 @@ namespace BankSystem.DataBase
                     command.ExecuteNonQuery();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine(e.Message);
                 throw;
             }
             finally
@@ -476,8 +481,9 @@ namespace BankSystem.DataBase
                     command.ExecuteNonQuery();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 throw;
             }
             finally

@@ -29,11 +29,11 @@ namespace BankSystem
         {
             SqlConnectionStringBuilder connectStrBuilder = new SqlConnectionStringBuilder
             {
-                DataSource = @"(localdb)\MSSQLLocalDB",
+                DataSource = @"(localdb)\MSSQLLocalDB1",
                 InitialCatalog = "BankSystemDB",
                 IntegratedSecurity = true
             };
-
+             
             var BankADOSQL = new BankSQL(connectStrBuilder);
             if (!BankADOSQL.ConnectionAvailable())
             {
