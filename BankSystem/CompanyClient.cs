@@ -13,7 +13,7 @@ namespace BankSystem
             
         }
 
-        public CompanyClient(string firstName, string lastName, int id) : base(firstName, lastName, id)
+        public CompanyClient(string firstName, string lastName) : base(firstName, lastName)
         {
         }
     }

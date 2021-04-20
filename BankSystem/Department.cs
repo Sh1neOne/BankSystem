@@ -7,52 +7,45 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    class Departament<T>
-       where T : Client, new()
+    public class Department
 
     {
-        private ObservableCollection<T> clients;
+        private ObservableCollection<Client> clients;
         public static Action<Client, int> addClientInDb;
         public static Action<Client> deleteClientInDb;
 
         private string name;
         private int id;
 
-        public Departament(string name, int id)
+
+        public Department(string name)
         {
-            Clients = new ObservableCollection<T>();
+            Clients = new ObservableCollection<Client>();
             Name = name;
-            Id = id;
         }
 
-        public void AddClient(T client)
+        public Department()
+        {
+            Clients = new ObservableCollection<Client>();
+        }
+
+        public void AddClient(Client client)
         {
             Clients.Add(client);
             addClientInDb?.Invoke(client, this.Id);
         }
-        /// <summary>
-        /// Метод возвращает коллекцию клиентов определенного типа из общего списка
-        /// </summary>
-        /// <param name="bank"></param>
-        public void CreateClientCol(Bank bank)
-        {
-            var a = bank.AllClients.FindAll(x => x.GetType() == typeof(T));
-            foreach (T item in a)
-            {
-                Clients.Add(item);
-            }
-        }
+
         /// <summary>
         /// Метод вызывает диалог добавления нововго клиента
         /// </summary>
         public void AddClientDialog()
         {
-            T newClient = new T();
+            Client newClient = new Client();
        
-            DialogClient dc = new DialogClient(newClient as T);
+            DialogClient dc = new DialogClient(newClient);
             if (dc.ShowDialog() == true)
             {
-                this.AddClient(dc.ContextClient as T);
+                this.AddClient(dc.ContextClient as Client);                
             }
         }
 
@@ -60,7 +53,7 @@ namespace BankSystem
         /// Метод удаляет клиента
         /// </summary>
         /// <param name="client"></param>
-        public void DeleteClient(T client)
+        public void DeleteClient(Client client)
         {
             Clients.Remove(client);
             deleteClientInDb?.Invoke(client);
@@ -68,7 +61,7 @@ namespace BankSystem
 
  
 
-        public ObservableCollection<T> Clients { get => clients; set => clients = value; }
+        public ObservableCollection<Client> Clients { get => clients; set => clients = value; }
         public string Name { get => name; set => name = value; }
         public int Id { get => id; set => id = value; }
     }

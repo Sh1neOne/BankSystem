@@ -14,25 +14,26 @@ namespace BankSystem
     {
         private string firstName;
         private string lastName;
-        private int id;
+        private int id;    
         private ObservableCollection<Account> accounts;
         private bool goodCreditHistory;
         public event PropertyChangedEventHandler PropertyChanged;
         public static event Action<Account, int> accountSaveInDb;
         public static event Action<Account> accountDeleteInDb;
         public static event Action<Client> clientUpdateInDb;
+        public static Random rnd = new Random();
 
-        public Client() : this("", "", 0)
+        public Client() 
         {
-            Id = -1;
+            Accounts = new ObservableCollection<Account>();
         }
 
-        public Client(string firstName, string lastName, int id)
+        public Client(string firstName, string lastName)
         {
             FirstName = firstName;
             LastName = lastName;
             Accounts = new ObservableCollection<Account>();
-            Id = id;
+
         }
         /// <summary>
         /// Метод вызывает диалог редактирования клиента
@@ -94,12 +95,38 @@ namespace BankSystem
             accountDeleteInDb?.Invoke(acc);
         }
 
+        /// <summary>
+        /// Метод создает случайные счета клиентов
+        /// </summary>
+        /// <param name="client"></param>
+        public void AddRandomAccounts()
+        {
+            var CountAcc = rnd.Next(3, 7);
+            for (int i = 1; i <= CountAcc; i++)
+            {
+                var rndAccType = rnd.Next(2);
+                switch (rndAccType)
+                {
+                    case 0:
+                        this.AddAccount(new Account(i.ToString(), rnd.Next(5) * 1000));
+                        break;
+                    case 1:
+                        this.AddAccount(new DepositAccount(i.ToString(), rnd.Next(1, 5) * 1000, Convert.ToBoolean(rnd.Next(1)), rnd.Next(1, 13), rnd.Next(1, 13)));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }
         public int Id { get => id; set => id = value; }
         public bool GoodCreditHistory { get => goodCreditHistory; set => goodCreditHistory = value; }
         public ObservableCollection<Account> Accounts { get => accounts; set => accounts = value; }
         public double TotalBalance { get => Accounts.Sum(x => x.Balance); }
-        public int MaxInterestRate { get => GoodCreditHistory? Bank.interestRate + 1 : Bank.interestRate; }
+        public int MaxInterestRate { get => GoodCreditHistory? 13 :12; }
+        public Department Department { get; set; }
+        public int DepartmentId { get; set; }
     }
 }

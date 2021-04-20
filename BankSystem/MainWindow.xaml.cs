@@ -27,35 +27,14 @@ namespace BankSystem
     /// </summary>\
     public partial class MainWindow : Window
     {
+        BankContext bankContext;
         //LogsTransactions logs;
         public MainWindow()
         {
             InitializeComponent();
-            Task<Bank> tBank = new Task<Bank>(() =>
-            {
-                return new Bank();
-            }
-            );
-            
-            tBank.Start();
-            
-            this.DataContext = tBank.Result.DepartamentList;
+            bankContext = new BankContext();
+            this.DataContext = bankContext.Departments.Include("Clients.Accounts").ToList();
             AccountsListBox.DataContext = this.DataContext;
-
-            this.IsEnabled = false;
-            tBank.ContinueWith(_ =>
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        if (tBank.Result.DepartamentList.Count != 0)
-                        {
-                            this.IsEnabled = true;
-                        }
-                       
-                    }
-                    );
-                }
-            );
 
         }
         /// <summary>
@@ -65,10 +44,9 @@ namespace BankSystem
         /// <param name="e"></param>
         private void AddClient_Click(object sender, RoutedEventArgs e)
         {
-            var t = DepartamentsList.SelectedItem;
-            MethodInfo mi = t.GetType().GetMethod("AddClientDialog");
-            object[] args = { };
-            mi.Invoke(t, args);
+            var t = DepartamentsList.SelectedItem as Department;
+            t.AddClientDialog();
+            bankContext.SaveChanges();
         }
 
         /// <summary>
@@ -79,7 +57,7 @@ namespace BankSystem
         private void EditClient_Click(object sender, RoutedEventArgs e)
         {
             var c = ClientListView.SelectedItem as Client;
-            if (c != null) { c.EditClientDialog(); }
+            if (c != null) { c.EditClientDialog(); bankContext.SaveChanges(); }
         }
         /// <summary>
         /// Обработчик нажатия кнопки удаления клиента
@@ -88,11 +66,10 @@ namespace BankSystem
         /// <param name="e"></param>
         private void DeleteClient_Click(object sender, RoutedEventArgs e)
         {
-            var SelDep = DepartamentsList.SelectedItem;
+            var SelDep = DepartamentsList.SelectedItem as Department;
             var SelClient = ClientListView.SelectedItem as Client;
-            MethodInfo mi = SelDep.GetType().GetMethod("DeleteClient");
-            object[] args = { SelClient };
-            mi.Invoke(SelDep, args);
+            SelDep.DeleteClient(SelClient);
+            bankContext.SaveChanges();
         }
 
         /// <summary>
@@ -115,6 +92,7 @@ namespace BankSystem
         {
             var SelClient = ClientListView.SelectedItem as Client;
             SelClient.AddAccountDialog();
+            bankContext.SaveChanges();
         }
 
         /// <summary>
@@ -127,6 +105,7 @@ namespace BankSystem
             var selClient = ClientListView.SelectedItem as Client;
             var selAccount = AccountsListBox.SelectedItem as Account;
             selAccount.DelAccount(selClient);
+            bankContext.SaveChanges();
 
         }
 
@@ -178,6 +157,7 @@ namespace BankSystem
             accountFrom.BalanceTransferTo(accountTo, sum);
             ClientListView.Items.Refresh();
             MessageBox.Show("Перевод выполнен");
+            bankContext.SaveChanges();
         }
 
         private void logsTransactions_Click(object sender, RoutedEventArgs e)

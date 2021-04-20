@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BankSystemDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="clientId" Type="int" />
+          <Property Name="name" Type="nchar" MaxLength="50" />
+          <Property Name="balance" Type="money" />
+          <Property Name="accountType" Type="int" />
+          <Property Name="capitalization" Type="int" />
+          <Property Name="mountCount" Type="int" />
+          <Property Name="interestRate" Type="int" />
+        </EntityType>
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="firstName" Type="nchar" MaxLength="50" />
+          <Property Name="lastName" Type="nchar" MaxLength="50" />
+          <Property Name="goodCreditHistory" Type="bit" />
+          <Property Name="clientType" Type="int" />
+          <Property Name="departmentId" Type="int" />
+        </EntityType>
+        <EntityType Name="Departments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nchar" MaxLength="50" />
+          <Property Name="departmentType" Type="int" />
+        </EntityType>
+        <Association Name="FK_Accounts_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="0..1" />
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Accounts">
+              <PropertyRef Name="clientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+          <End Role="Clients1" Type="Self.Clients" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clients1">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Departments">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="departmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BankSystemDBModelStoreContainer">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Departments" EntityType="Self.Departments" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Accounts_Clients" Association="Self.FK_Accounts_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Accounts" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Clients" Association="Self.FK_Clients_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Clients1" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Departments" Association="Self.FK_Clients_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BankSystemDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="clientId" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="balance" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="accountType" Type="Int32" />
+          <Property Name="capitalization" Type="Int32" />
+          <Property Name="mountCount" Type="Int32" />
+          <Property Name="interestRate" Type="Int32" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK_Accounts_Clients" FromRole="Accounts" ToRole="Clients" />
+        </EntityType>
+        <EntityType Name="Clients">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="firstName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="lastName" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="goodCreditHistory" Type="Boolean" />
+          <Property Name="clientType" Type="Int32" />
+          <Property Name="departmentId" Type="Int32" />
+          <NavigationProperty Name="Accounts" Relationship="Self.FK_Accounts_Clients" FromRole="Clients" ToRole="Accounts" />
+          <NavigationProperty Name="Clients1" Relationship="Self.FK_Clients_Clients" FromRole="Clients" ToRole="Clients1" />
+          <NavigationProperty Name="Clients2" Relationship="Self.FK_Clients_Clients" FromRole="Clients1" ToRole="Clients" />
+          <NavigationProperty Name="Departments" Relationship="Self.FK_Clients_Departments" FromRole="Clients" ToRole="Departments" />
+        </EntityType>
+        <EntityType Name="Departments">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="departmentType" Type="Int32" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK_Clients_Departments" FromRole="Departments" ToRole="Clients" />
+        </EntityType>
+        <Association Name="FK_Accounts_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="0..1" />
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Accounts">
+              <PropertyRef Name="clientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Clients">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+          <End Role="Clients1" Type="Self.Clients" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Clients">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clients1">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clients_Departments">
+          <End Role="Departments" Type="Self.Departments" Multiplicity="0..1" />
+          <End Role="Clients" Type="Self.Clients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departments">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Clients">
+              <PropertyRef Name="departmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BankSystemDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" />
+          <EntitySet Name="Departments" EntityType="Self.Departments" />
+          <AssociationSet Name="FK_Accounts_Clients" Association="Self.FK_Accounts_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Accounts" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Clients" Association="Self.FK_Clients_Clients">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Clients1" EntitySet="Clients" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clients_Departments" Association="Self.FK_Clients_Departments">
+            <End Role="Departments" EntitySet="Departments" />
+            <End Role="Clients" EntitySet="Clients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BankSystemDBModelStoreContainer" CdmEntityContainer="BankSystemDBEntities">
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="BankSystemDBModel.Accounts">
+              <MappingFragment StoreEntitySet="Accounts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="clientId" ColumnName="clientId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="balance" ColumnName="balance" />
+                <ScalarProperty Name="accountType" ColumnName="accountType" />
+                <ScalarProperty Name="capitalization" ColumnName="capitalization" />
+                <ScalarProperty Name="mountCount" ColumnName="mountCount" />
+                <ScalarProperty Name="interestRate" ColumnName="interestRate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="BankSystemDBModel.Clients">
+              <MappingFragment StoreEntitySet="Clients">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="firstName" ColumnName="firstName" />
+                <ScalarProperty Name="lastName" ColumnName="lastName" />
+                <ScalarProperty Name="goodCreditHistory" ColumnName="goodCreditHistory" />
+                <ScalarProperty Name="clientType" ColumnName="clientType" />
+                <ScalarProperty Name="departmentId" ColumnName="departmentId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="BankSystemDBModel.Departments">
+              <MappingFragment StoreEntitySet="Departments">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="departmentType" ColumnName="departmentType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

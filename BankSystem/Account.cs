@@ -26,6 +26,11 @@ namespace BankSystem
             Balance = balance;
             Id = id;       
         }
+
+        public Account()
+        {
+        }
+
         /// <summary>
         /// Метод осуществляет перевод денег му счетами
         /// </summary>

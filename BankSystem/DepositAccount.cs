@@ -12,6 +12,11 @@ namespace BankSystem
         private bool capitalization;
         private int mountCount;
         private int interestRate;
+
+        public DepositAccount()
+        {
+        }
+
         public DepositAccount(string name, int balance = 0, int id = -1) : base(name, balance, id)
         {
         }
