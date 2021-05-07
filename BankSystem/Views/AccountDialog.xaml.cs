@@ -19,12 +19,12 @@ namespace BankSystem
     /// </summary>
     public partial class AccountDialog : Window
     {
-        private Account account;
+        private AccountModel account;
         /// <summary>
         /// Конструктор окна счета. Если у клиента хорошая кредитная история, добавляется 1 процент к максимальной процентной ставке депозита
         /// </summary>
         /// <param name="client"></param>
-        public AccountDialog(Client client)
+        public AccountDialog(ClientModel client)
         {
             InitializeComponent();
             var typeAccounts = GetAccountDictonary();
@@ -53,7 +53,7 @@ namespace BankSystem
                 return;
             }
 
-            if ((!Int32.TryParse(countMonthTextBox.Text, out int countMonth) || countMonth < 1) && (selectTypeAccount == typeof(DepositAccount)))
+            if ((!Int32.TryParse(countMonthTextBox.Text, out int countMonth) || countMonth < 1) && (selectTypeAccount == typeof(DepositAccountModel)))
             {
                 MessageBox.Show("Не верно указано количество месяцеы");
                 return;
@@ -62,9 +62,9 @@ namespace BankSystem
 
             try
             {
-                if (selectTypeAccount == typeof(DepositAccount))
+                if (selectTypeAccount == typeof(DepositAccountModel))
                 {
-                    Account = new DepositAccount(nametextBox.Text,
+                    Account = new DepositAccountModel(nametextBox.Text,
                                                  balance,
                                                  Convert.ToBoolean(capitalizaztionCheckBox.IsChecked),
                                                  Convert.ToInt32(interestRateComboBox.Text),
@@ -72,7 +72,7 @@ namespace BankSystem
                 }
                 else
                 {
-                    Account = new Account(nametextBox.Text,
+                    Account = new AccountModel(nametextBox.Text,
                                           balance);
                 }
                 this.DialogResult = true;
@@ -91,17 +91,17 @@ namespace BankSystem
         private Dictionary<String, Type> GetAccountDictonary()
         {
             Dictionary<String, Type> dict = new Dictionary<string, Type>();
-            dict.Add("Депозитный счет", typeof(DepositAccount));
-            dict.Add("Обычный счет", typeof(Account));
+            dict.Add("Депозитный счет", typeof(DepositAccountModel));
+            dict.Add("Обычный счет", typeof(AccountModel));
             return dict;
         }
 
-        public Account Account { get => account; set => account = value; }
+        public AccountModel Account { get => account; set => account = value; }
 
         private void AccountType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Type selectTypeAccount = ((KeyValuePair<String, Type>)(AccountType.SelectedItem)).Value;
-            Visibility depVisible = selectTypeAccount == typeof(DepositAccount) ? Visibility.Visible : Visibility.Collapsed;
+            Visibility depVisible = selectTypeAccount == typeof(DepositAccountModel) ? Visibility.Visible : Visibility.Collapsed;
             depositBlockStackPanel.Visibility = depVisible;
         }
     }

@@ -8,7 +8,7 @@ namespace BankSystem
 {
     public static class Extensions
     {
-        public static void DelAccount(this Account a, Client client)
+        public static void DelAccount(this AccountModel a, ClientModel client)
         {
             client.DeleteAccount(a);
         }

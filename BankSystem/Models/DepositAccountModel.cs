@@ -7,20 +7,20 @@ using BankLibrary;
 
 namespace BankSystem
 {
-    class DepositAccount : Account
+    class DepositAccountModel : AccountModel
     {
         private bool capitalization;
         private int mountCount;
         private int interestRate;
 
-        public DepositAccount()
+        public DepositAccountModel()
         {
         }
 
-        public DepositAccount(string name, int balance = 0, int id = -1) : base(name, balance, id)
+        public DepositAccountModel(string name, int balance = 0, int id = -1) : base(name, balance, id)
         {
         }
-        public DepositAccount(string name, int balance, bool capitalization, int interestRate, int mountCount, int id = -1) : this(name, balance)
+        public DepositAccountModel(string name, int balance, bool capitalization, int interestRate, int mountCount, int id = -1) : this(name, balance)
         {
             Capitalization = capitalization;
             InterestRate = interestRate;

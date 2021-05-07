@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BankSystem.Models;
+using BankSystem.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,23 +19,32 @@ namespace BankSystem
     /// <summary>
     /// Логика взаимодействия для DialogClient.xaml
     /// </summary>
-    public partial class DialogClient : Window
-
+    public partial class DialogClient 
     {
-        private Client contextClient;
-        public DialogClient(Client contextCl)
+        private ClientModel contextClient;
+        
+
+        public DialogClient(ClientModel contextCl)
         {
             ContextClient = contextCl;
             this.DataContext = ContextClient;
             InitializeComponent();
         }
 
-        public Client ContextClient { get => contextClient; set => contextClient = value; }
+        public DialogClient(DepartmentModel department)
+        {
+            ContextClient = ClientFactory.CreateClient(department, "", "");
+            this.DataContext = ContextClient;
+            InitializeComponent();
+        }
+
+        public ClientModel ContextClient { get => contextClient; set => contextClient = value; }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
             ContextClient.GoodCreditHistory = goodCreditHistoryCheckBox.IsEnabled;
+            ContextClient.EditClient();
         }
     }
 }

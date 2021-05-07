@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankSystem.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,26 +9,27 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    public class Account : INotifyPropertyChanged
+    public class AccountModel : BaseViewModel
     {
         protected string name;
         private double balance;
         private int id;
+        private int clientId;
         
         public event EventHandler<AccountEventArgs> BalanceChanged;
-        public static event Action<Account,Account,double> CommitTransaction;
-        public static event Action<Account> BalanceChagedInDb;
+        public static event Action<AccountModel,AccountModel,double> CommitTransaction;
+        public static event Action<AccountModel> BalanceChagedInDb;
 
         //public event Action<string, Account> BalanceChanged;
    
-        public Account(string name, double balance = 0, int id = -1)
+        public AccountModel(string name, double balance = 0, int id = -1)
         {
             Name = name;
             Balance = balance;
             Id = id;       
         }
 
-        public Account()
+        public AccountModel()
         {
         }
 
@@ -37,7 +39,7 @@ namespace BankSystem
         /// <param name="accountFrom"></param>
         /// <param name="accountTo"></param>
         /// <param name="sum"></param>
-        public void BalanceTransferTo(Account accountTo, double sum)
+        public void BalanceTransferTo(AccountModel accountTo, double sum)
         {
             this.Balance -= sum;
             accountTo.Balance += sum;
@@ -52,13 +54,7 @@ namespace BankSystem
         {
             return $"Счет: {Name}\nБаланс: {Balance}";
         }
-
-        
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+      
 
         public class AccountEventArgs : EventArgs
         {
@@ -81,7 +77,8 @@ namespace BankSystem
                 balance = value;
                 BalanceChanged?.Invoke(this, new AccountEventArgs(value.ToString()));
                 BalanceChagedInDb?.Invoke(this);
-                OnPropertyChanged();           
+                OnPropertyChanged();
+                OnPropertyChanged("TotalBalance");
             }
         }
 
@@ -90,6 +87,6 @@ namespace BankSystem
             get => id;
             set => id = value;
         }
-             
+        public int ClientId { get => clientId; set => clientId = value; }
     }
 }

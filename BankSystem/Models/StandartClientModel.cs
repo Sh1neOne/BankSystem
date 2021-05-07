@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace BankSystem
 {
-    class StandartClient : Client
+    class StandartClientModel : ClientModel
     {
-        public StandartClient()
+        public StandartClientModel()
         {
         }
 
-        public StandartClient(string firstName, string lastName) : base(firstName, lastName)
+        public StandartClientModel(string firstName, string lastName) : base(firstName, lastName)
         {
         }
     }

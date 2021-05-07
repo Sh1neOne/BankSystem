@@ -13,7 +13,7 @@
         <StackPanel Grid.Row="0">
             <TextBlock>Имя:</TextBlock>
             <TextBox Name="firstNameBox" MinWidth="250">
-                <Binding Path="FirstName">
+                <Binding Path="FirstName" Mode="TwoWay">
                     <Binding.ValidationRules>
                         <ExceptionValidationRule />
                     </Binding.ValidationRules>

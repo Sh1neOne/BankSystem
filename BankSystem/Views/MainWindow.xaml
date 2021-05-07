@@ -4,14 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BankSystem"
+        xmlns:viewmodels ="clr-namespace:BankSystem.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800">
-
+    <!--<Window.DataContext>
+        <viewmodels:ApplicationViewModel/>
+    </Window.DataContext>-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-           
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="200"></RowDefinition>
@@ -25,13 +27,15 @@
                     >
             <Label>Отделы</Label>
             <ListBox  x:Name="DepartamentsList"                    
+                      Height="134"
                       VerticalAlignment="Stretch"
                       Margin="2"
                       HorizontalAlignment="Stretch"
                       MinHeight="30"
                       DisplayMemberPath="Name"
                       IsSynchronizedWithCurrentItem="True"
-                      ItemsSource="{Binding}" Height="134"
+                      ItemsSource="{Binding Departments}" 
+                      SelectedItem="{Binding SelectedDepartment, Mode=TwoWay}"
                       >
             </ListBox>
         </StackPanel>
@@ -49,19 +53,19 @@
                         Height="30"
                         Width="Auto" HorizontalAlignment="Left"
                        >
-                <Button x:Name="AddClient" Click="AddClient_Click">
+                <Button x:Name="AddClient" Command="{Binding AddClientCommand}">
                     <Image Source="/Images/flat-style-circle-add_icon-icons.com_66944.png" />
                 </Button>
-                <Button x:Name="EditClient" Click="EditClient_Click">
+                <Button x:Name="EditClient" Command ="{Binding EditClientCommand}">
                     <Image Source="/Images/flat-style-circle-edit_icon-icons.com_66939.png" />
                 </Button>
-                <Button x:Name="DeleteClient" Click="DeleteClient_Click">
+                <Button x:Name="DeleteClient" Command="{Binding DeleteClientCommand}">
                     <Image Source="/Images/flat-style-circle-delete-trash_icon-icons.com_66945.png" />
                 </Button>
             </StackPanel>
             <ListView x:Name="ClientListView"
-
-                      ItemsSource="{Binding Path = Clients}"   
+                      ItemsSource="{Binding Path = SelectedDepartment.Clients}"   
+                      SelectedItem="{Binding Path= SelectedClient, Mode=TwoWay}"
                       IsSynchronizedWithCurrentItem="True"
                       >
                 <ListView.View>
@@ -88,20 +92,23 @@
                         Height="30"
                         Width="Auto" HorizontalAlignment="Left"
                        >
-                <Button x:Name="AddAccount" Click="AddAccount_Click">
+                <Button x:Name="AddAccount" Command="{Binding AddAccountCommand}">
                     <Image Source="/Images/flat-style-circle-add_icon-icons.com_66944.png" />
                 </Button>
-                <Button x:Name="InformationAccount" Click="InformationClient_Click">
+                <Button x:Name="InformationAccount"                        
+                        Command="{Binding InformationAccountCommand}"
+                        >
                     <Image Source="/Images/article_icon_174038.png" />
                 </Button>
-                <Button x:Name="DeleteAccount" Click="DeleteAccount_Click">
+                <Button x:Name="DeleteAccount" Command="{Binding DeleteAccountCommand}">
                     <Image Source="/Images/flat-style-circle-delete-trash_icon-icons.com_66945.png" />
                 </Button>
             </StackPanel>
             <ListView x:Name="AccountsListBox"            
                  DisplayMemberPath="Name"
-                 ItemsSource="{Binding Path = Clients/Accounts}">
-                
+                 ItemsSource="{Binding Path = SelectedClient.Accounts}"
+                 SelectedItem="{Binding Path=SelectedAccount, Mode=TwoWay}"     
+                 >
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Id}">Id</GridViewColumn>
@@ -118,24 +125,24 @@
             <Label>Переводы</Label>
             <TextBlock>Счет списания:</TextBlock>
             <StackPanel Orientation="Horizontal" >
-                <Button x:Name="accountFromButton" Click="accountFromButton_Click">--></Button>
-                <ListBox x:Name="accountFromListBox" Width="300" Margin="5,0" DisplayMemberPath="Name"></ListBox>
+                <Button x:Name="accountFromButton" Command="{Binding SelectTransferAccountFromCommand}">--></Button>
+                <ListBox x:Name="accountFromListBox" Width="300" Margin="5,0" DisplayMemberPath="Name" ItemsSource ="{Binding AccountFrom, Mode=TwoWay}"></ListBox>
             </StackPanel>
             <TextBlock>Счет зачисления:</TextBlock>
             <StackPanel Orientation="Horizontal">
-                <Button x:Name="accountToButton" Click="accountToButton_Click">--></Button>
-                <ListBox x:Name="accountToListBox" Width="300" Margin="5,0" DisplayMemberPath="Name"></ListBox>
+                <Button x:Name="accountToButton" Command="{Binding SelectTransferAccountToCommand}">--></Button>
+                <ListBox x:Name="accountToListBox" Width="300" Margin="5,0" DisplayMemberPath="Name" ItemsSource ="{Binding AccountTo, Mode=OneWay}"></ListBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                 <TextBlock>Сумма перевода:</TextBlock>
-                <TextBox x:Name="sumTextBox"
+                <TextBox x:Name="sumTextBox" Text="{Binding SumTransfer, Mode=TwoWay}"
                     Width="232"></TextBox>
             </StackPanel>
-            <Button x:Name="transfer" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="transfer_Click"> Перевести</Button>
-            <Button x:Name="logsTransactions" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="logsTransactions_Click">Список транзакций</Button>
-            <Button x:Name="generateTransaction" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="generateTransaction_Click">Сгенерировать транзакции</Button>
-            <Button x:Name="saveTransactionToJSON" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="saveTransactionToJSON_Click">Сохранить транзакции</Button>
-            <Button x:Name="loadTransactionFromJSON" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Click="loadTransactionFromJSON_Click">Загрузить транзакции</Button>
+            <Button x:Name="transfer" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Command="{Binding TransferSumCommand}"> Перевести</Button>
+            <Button x:Name="logsTransactions" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Command="{Binding ShowTransactionCommand}">Список транзакций</Button>
+            <Button x:Name="generateTransaction" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Command="{Binding GenerateTransaction}">Сгенерировать транзакции</Button>
+            <Button x:Name="saveTransactionToJSON" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Command="{Binding SaveTransactionToJSONCommand}">Сохранить транзакции</Button>
+            <Button x:Name="loadTransactionFromJSON" Width="200" HorizontalAlignment="Left" Margin="0,5,0,0" Command="{Binding LoadTransacionFromJSONCommand}">Загрузить транзакции</Button>
         </StackPanel>
     </Grid>
 </Window>
